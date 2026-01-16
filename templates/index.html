@@ -10,6 +10,11 @@
 
     <p> Track your Instagram growth and content performance</p>
     <form method="post">
+        {%if engagement %}
+        <h3>
+            Engagement Rate : {{engagement}}
+        %</h3>
+        {%endif%}
         <label> Followers : </label> <br>
         <input type="number" name="followers"><br><br>
         

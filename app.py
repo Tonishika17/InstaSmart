@@ -3,13 +3,15 @@ app = Flask(__name__)
 @app.route("/", methods=["GET","POST"])
 def home():
     if request.method=="POST":
-        followers = request.form.followers
-        likes = request.form.likes
-        comments = request.form.comments
+        followers = int(request.form["followers"])
+        likes = int(request.form["likes"])
+        comments = int(request.form["comments"])
 
-        engagement_rate = (likes+comments/followers)*100
+        engagement_rate = (likes+comments)/followers*100
 
-        return render_template("index.html",Engagement=engagement_rate)
+        return render_template(
+            "index.html",
+            engagement=engagement_rate)
 
     return render_template("index.html")
 
