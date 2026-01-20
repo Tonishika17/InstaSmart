@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 app = Flask(__name__)
+posts = []
 @app.route("/", methods=["GET","POST"])
 def home():
     if request.method=="POST":
@@ -10,10 +11,20 @@ def home():
 
         engagement_rate = (likes+comments)/followers*100
 
+        values = {
+            "followers": followers,
+            "likes": likes,
+            "comments": comments,
+            "engagement": engagement_rate,
+            "content_type": content_type
+        }
+        posts.append(values)
+        print(posts)
         return render_template(
             "index.html",
             engagement=engagement_rate,
-            content_type=content_type)
+            content_type=content_type,
+            posts=posts)
 
     return render_template("index.html")
 
