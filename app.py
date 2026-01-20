@@ -6,12 +6,14 @@ def home():
         followers = int(request.form["followers"])
         likes = int(request.form["likes"])
         comments = int(request.form["comments"])
+        content_type = request.form["content_type"]
 
         engagement_rate = (likes+comments)/followers*100
 
         return render_template(
             "index.html",
-            engagement=engagement_rate)
+            engagement=engagement_rate,
+            content_type=content_type)
 
     return render_template("index.html")
 

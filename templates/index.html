@@ -13,8 +13,13 @@
         {%if engagement %}
         <h3>
             Engagement Rate : {{engagement}}
+            
+            <p>Content Category: {{ content_type }}</p>
+
         %</h3>
         {%endif%}
+
+
         <label> Followers : </label> <br>
         <input type="number" name="followers"><br><br>
         
@@ -23,6 +28,16 @@
 
         <label> Comments :</label><br>
         <input type="number" name="comments"><br><br>
+
+        <label>Content Type:</label><br>
+
+        <select name="content_type">
+        <option value="fashion">Fashion</option>
+        <option value="beauty">Beauty</option>
+        <option value="acting">Acting</option>
+        </select>
+
+        <br><br>
 
         <button type="submit">Analyze</button>
     </form>
