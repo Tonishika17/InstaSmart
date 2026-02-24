@@ -29,6 +29,15 @@
         <label> Comments :</label><br>
         <input type="number" name="comments"><br><br>
 
+        <label> Posting Hour :</label><br>
+        <input type="number" name="hour"><br><br>
+
+        <label> Caption Length :</label><br>
+        <input type="number" name="caption_length"><br><br>
+
+        <label> Hashtag Count :</label><br>
+        <input type="number" name="hashtags"><br><br>
+
         <label>Content Type:</label><br>
 
         <select name="content_type">
@@ -50,6 +59,9 @@
             <th>Comments</th>
             <th>Engagement</th>
             <th>Category</th>
+            <th>Posting Hour</th>
+            <th>Caption Length</th>
+            <th>Hashtag Count</th>
         </tr>
 
         {% for post in posts %}
@@ -59,6 +71,9 @@
             <td>{{ post.comments }}</td>
             <td>{{ post.engagement }}</td>
             <td>{{ post.content_type }}</td>
+            <td>{{ post.hour }}</td>
+            <td>{{ post.caption_length }}</td>
+            <td>{{ post.hashtags }}</td>
         </tr>
         {% endfor %}
     </table>

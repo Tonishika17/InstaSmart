@@ -16,6 +16,9 @@ def home():
             likes = int(request.form["likes"])
             comments = int(request.form["comments"])
             content_type = request.form["content_type"]
+            hour = int(request.form["hour"])
+            caption_length = int(request.form["caption_length"])
+            hashtags = int(request.form["hashtags"])
 
             engagement_rate = (likes+comments)/followers*100
 
@@ -24,7 +27,10 @@ def home():
                 "likes": likes,
                 "comments": comments,
                 "engagement": engagement_rate,
-                "content_type": content_type
+                "content_type": content_type,
+                "hour": hour,
+                "caption_length": caption_length,
+                "hashtags": hashtags
             }
             posts.append(values)
         
