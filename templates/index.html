@@ -70,7 +70,14 @@
             <td>{{ post.likes }}</td>
             <td>{{ post.comments }}</td>
             <td>{{ post.engagement }}</td>
-            <td>{{ post.content_type }}</td>
+            <td>{% if post.category == 0 %}
+                fashion
+                {% elif post.category == 1 %}
+                beauty
+                {% else %}
+                acting
+                {% endif %}
+            </td>
             <td>{{ post.hour }}</td>
             <td>{{ post.caption_length }}</td>
             <td>{{ post.hashtags }}</td>

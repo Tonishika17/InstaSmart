@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+db.init_app(app)
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     followers = db.Column(db.Integer)
