@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+import csv
+from flask import Flask, render_template, request, Response
 from models import db,Post
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -9,7 +10,6 @@ with app.app_context():
     db.create_all()
     
 @app.route("/", methods=["GET","POST"])
-
 def home():
     engagement_rate = None
     content_type = ""
@@ -103,9 +103,19 @@ def home():
         beauty_avg=beauty_avg,
         acting_avg=acting_avg,
         best_category=best_category
-    )
+        )
 
+@app.route("/export")
+def export():
+    posts = Post.query.all()
 
+    def generate():
+        yield "followers,hour,caption_length,hashtags,category,engagement\n"
+
+        for post in posts:
+            yield f"{post.followers},{post.hour},{post.caption_length},{post.hashtags},{post.category},{post.engagement}\n"
+
+    return Response(generate(), mimetype="text/csv")
 @app.route("/about")
 def about():
     return "This is an Instagram Analysis Dashboard"
