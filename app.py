@@ -1,4 +1,4 @@
-import csv
+import csv,os
 from flask import Flask, render_template, request, Response
 from models import db,Post
 app = Flask(__name__)
@@ -109,13 +109,28 @@ def home():
 def export():
     posts = Post.query.all()
 
-    def generate():
-        yield "followers,hour,caption_length,hashtags,category,engagement\n"
+    file_path = "dataset.csv"
 
+    with open(file_path, mode="w", newline="") as file:
+        writer = csv.writer(file)
+
+        # header
+        writer.writerow(["followers", "likes", "comments", "hour", "caption_length", "hashtags", "category", "engagement"])
+
+        # data
         for post in posts:
-            yield f"{post.followers},{post.hour},{post.caption_length},{post.hashtags},{post.category},{post.engagement}\n"
+            writer.writerow([
+                post.followers,
+                post.likes,
+                post.comments,
+                post.hour,
+                post.caption_length,
+                post.hashtags,
+                post.category,
+                post.engagement
+            ])
 
-    return Response(generate(), mimetype="text/csv")
+    return "CSV saved successfully as dataset.csv"
 @app.route("/about")
 def about():
     return "This is an Instagram Analysis Dashboard"
