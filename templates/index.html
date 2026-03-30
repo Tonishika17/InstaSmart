@@ -10,15 +10,22 @@
 
     <p> Track your Instagram growth and content performance</p>
     <form method="post">
-        {%if engagement %}
+        {% if engagement %}
         <h3>
-            Engagement Rate : {{engagement}}
-
-            <p>Content Category: {{ content_type }}</p>
-
-        %</h3>
-        {%endif%}
-
+            Engagement Rate: {{ engagement }}%
+        </h3>
+        <p>Content Category: {{ content_type }}</p>
+        {% if predicted_engagement %}
+        <h3 style="color: green;">
+            🔮 Predicted Engagement: {{ predicted_engagement }}%
+        </h3>
+        {% endif %}
+        {% endif %}
+        {% if predicted_engagement and engagement %}
+        <p>
+            Difference: {{ predicted_engagement - engagement }}%
+        </p>
+        {% endif %}
 
         <label> Followers : </label> <br>
         <input type="number" name="followers"><br><br>
@@ -92,6 +99,6 @@
     <p>Acting Avg Engagement: {{ acting_avg }}%</p>
 
     <h3>🏆 Best Performing Category: {{ best_category }}</h3>
-
+    <h4> Predicted Engagement:{{predicted_engagement}}%</h4>
 </body>
 </html>

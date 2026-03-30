@@ -1,6 +1,8 @@
 import csv,os
+import joblib
 from flask import Flask, render_template, request, Response
 from models import db,Post
+model = joblib.load("model.pkl")
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
@@ -14,7 +16,7 @@ def home():
     engagement_rate = None
     content_type = ""
     best_category = ""
-
+    predicted_engagement = 0
     fashion_avg = 0
     beauty_avg = 0
     acting_avg = 0
@@ -38,7 +40,17 @@ def home():
         hashtags = int(request.form["hashtags"])
 
         engagement_rate = (likes + comments) / followers * 100
-
+        #ML prediction
+        input_data = [[
+            followers,
+            hour,
+            caption_length,
+            hashtags,
+            category
+            ]]
+        
+        predicted_engagement = model.predict(input_data)[0]
+        #save in db
         new_post = Post(
             followers=followers,
             likes=likes,
@@ -102,7 +114,8 @@ def home():
         fashion_avg=fashion_avg,
         beauty_avg=beauty_avg,
         acting_avg=acting_avg,
-        best_category=best_category
+        best_category=best_category,
+        predicted_engagement=round(predicted_engagement, 2)
         )
 
 @app.route("/export")

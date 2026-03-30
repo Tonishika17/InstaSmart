@@ -1,11 +1,12 @@
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 #from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, r2_score
 
 data = pd.read_csv("dataset.csv")
-X=data[["followers","likes","comments","hour","caption_length","hashtags","category"]]
+X=data[["followers","hour","caption_length","hashtags","category"]]
 y=data["engagement"]
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -22,3 +23,4 @@ r2 = r2_score(y_test, predictions)
 
 print("MAE:", mae)
 print("R2 Score:", r2)
+joblib.dump(model,"model.pkl")
