@@ -16,3 +16,6 @@ class Post(db.Model):
     hashtags = db.Column(db.Integer)
     category = db.Column(db.Integer)
     engagement = db.Column(db.Float)
+    reach = db.Column(db.Integer)
+    impressions = db.Column(db.Integer)
+    post_type = db.Column(db.Integer)

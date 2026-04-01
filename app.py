@@ -16,6 +16,7 @@ def home():
     engagement_rate = None
     content_type = ""
     best_category = ""
+    suggestion = ""
     predicted_engagement = 0
     fashion_avg = 0
     beauty_avg = 0
@@ -26,7 +27,16 @@ def home():
         likes = int(request.form["likes"])
         comments = int(request.form["comments"])
         content_type = request.form["content_type"]
+        reach = int(request.form["reach"])
+        impressions = int(request.form["impressions"])
+        post_type = request.form["post_type"]
+        post_type_map = {
+            "reel": 0,
+            "photo": 1,
+            "video": 2
+            }
 
+        post_type_encoded = post_type_map[post_type]
         category_map = {
             "fashion": 0,
             "beauty": 1,
@@ -46,10 +56,25 @@ def home():
             hour,
             caption_length,
             hashtags,
-            category
+            category,
+            reach,
+            impressions,
+            post_type_encoded
             ]]
         
         predicted_engagement = model.predict(input_data)[0]
+        suggestion = ""
+        if predicted_engagement < engagement_rate:
+            suggestion = "⚠️ Your post underperformed. Try improving strategy."
+        elif predicted_engagement > engagement_rate:
+            suggestion = "✅ Good performance! Similar posts may work well."
+        # smarter rules
+        if hashtags < 5:
+            suggestion += " Use more hashtags."
+        if hour < 12:
+            suggestion += " Try posting in evening hours."
+        if category == 2:
+            suggestion += " Acting content is performing well."
         #save in db
         new_post = Post(
             followers=followers,
@@ -59,6 +84,9 @@ def home():
             caption_length=caption_length,
             hashtags=hashtags,
             category=category,
+            reach=reach,
+            impressions=impressions,
+            post_type=post_type_encoded,
             engagement=engagement_rate
         )
 
@@ -115,7 +143,8 @@ def home():
         beauty_avg=beauty_avg,
         acting_avg=acting_avg,
         best_category=best_category,
-        predicted_engagement=round(predicted_engagement, 2)
+        predicted_engagement=round(predicted_engagement, 2),
+        suggestion=suggestion
         )
 
 @app.route("/export")
@@ -128,7 +157,17 @@ def export():
         writer = csv.writer(file)
 
         # header
-        writer.writerow(["followers", "likes", "comments", "hour", "caption_length", "hashtags", "category", "engagement"])
+        writer.writerow([
+            "followers",
+            "hour",
+            "caption_length",
+            "hashtags",
+            "category",
+            "reach",
+            "impressions",
+            "post_type",
+            "engagement"
+            ])
 
         # data
         for post in posts:
@@ -140,6 +179,9 @@ def export():
                 post.caption_length,
                 post.hashtags,
                 post.category,
+                post.reach,
+                post.impressions,
+                post.post_type,
                 post.engagement
             ])
 

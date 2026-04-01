@@ -26,7 +26,7 @@
             Difference: {{ predicted_engagement - engagement }}%
         </p>
         {% endif %}
-
+        <h3> {{ suggestion }}</h3>
         <label> Followers : </label> <br>
         <input type="number" name="followers"><br><br>
         
@@ -46,7 +46,17 @@
         <input type="number" name="hashtags"><br><br>
 
         <label>Content Type:</label><br>
-
+        <label>Reach:</label><br>
+        <input type="number" name="reach"><br><br>
+        <label>Impressions:</label><br>
+        <input type="number" name="impressions"><br><br>
+        <label>Post Type:</label><br>
+        <select name="post_type">
+            <option value="reel">Reel</option>
+            <option value="photo">Photo</option>
+            <option value="video">Video</option>
+        </select>
+        <br><br>
         <select name="content_type">
         <option value="fashion">Fashion</option>
         <option value="beauty">Beauty</option>
@@ -99,6 +109,5 @@
     <p>Acting Avg Engagement: {{ acting_avg }}%</p>
 
     <h3>🏆 Best Performing Category: {{ best_category }}</h3>
-    <h4> Predicted Engagement:{{predicted_engagement}}%</h4>
 </body>
 </html>

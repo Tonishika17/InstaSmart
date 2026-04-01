@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, r2_score
 
 data = pd.read_csv("dataset.csv")
-X=data[["followers","hour","caption_length","hashtags","category"]]
+X=data[["followers","hour","caption_length","hashtags","category","reach","impressions","post_type"]]
 y=data["engagement"]
 
 X_train, X_test, y_train, y_test = train_test_split(
