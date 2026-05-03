@@ -3,111 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Brand Dashboard</title>
+    <title>InstaSmart Analytics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1> Personal Brand Analytics Dashboard</h1>
-
-    <p> Track your Instagram growth and content performance</p>
-    <form method="post">
-        {% if engagement %}
-        <h3>
-            Engagement Rate: {{ engagement }}%
-        </h3>
-        <p>Content Category: {{ content_type }}</p>
-        {% if predicted_engagement %}
-        <h3 style="color: green;">
-            🔮 Predicted Engagement: {{ predicted_engagement }}%
-        </h3>
-        {% endif %}
-        {% endif %}
-        {% if predicted_engagement and engagement %}
-        <p>
-            Difference: {{ predicted_engagement - engagement }}%
-        </p>
-        {% endif %}
-        <h3> {{ suggestion }}</h3>
-        <label> Followers : </label> <br>
-        <input type="number" name="followers"><br><br>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">I</div>
+            InstaSmart
+        </div>
         
-        <label> Likes :</label><br>
-        <input type="number" name="likes"><br><br>
+        <h6>General</h6>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" class="active">
+                    <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/export">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Export Data
+                </a>
+            </li>
+            <li>
+                <a href="/about">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    Message
+                </a>
+            </li>
+        </ul>
 
-        <label> Comments :</label><br>
-        <input type="number" name="comments"><br><br>
+        <h6>Tools</h6>
+        <ul class="sidebar-menu">
+            <li><a href="#"> <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Predict Engagement</a></li>
+        </ul>
 
-        <label> Posting Hour :</label><br>
-        <input type="number" name="hour"><br><br>
+        <div class="upgrade-card">
+            <h4>Pro Plan</h4>
+            <p>Get more insights</p>
+            <button class="btn-upgrade">Upgrade Plan</button>
+        </div>
+    </div>
 
-        <label> Caption Length :</label><br>
-        <input type="number" name="caption_length"><br><br>
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <div class="top-header">
+            <h2 class="page-title">Dashboard</h2>
+            
+            <div class="search-bar">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" placeholder="Search analytics...">
+            </div>
 
-        <label> Hashtag Count :</label><br>
-        <input type="number" name="hashtags"><br><br>
+            <div class="top-header-actions">
+                <div class="date-filter">Oct 18 - Nov 18 &nbsp;&nbsp; Monthly ⌄</div>
+                <div class="profile">
+                    <div class="profile-info">
+                        <h5>Young Alaska</h5>
+                        <p>Business</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <label>Content Type:</label><br>
-        <label>Reach:</label><br>
-        <input type="number" name="reach"><br><br>
-        <label>Impressions:</label><br>
-        <input type="number" name="impressions"><br><br>
-        <label>Post Type:</label><br>
-        <select name="post_type">
-            <option value="reel">Reel</option>
-            <option value="photo">Photo</option>
-            <option value="video">Video</option>
-        </select>
-        <br><br>
-        <select name="content_type">
-        <option value="fashion">Fashion</option>
-        <option value="beauty">Beauty</option>
-        <option value="acting">Acting</option>
-        </select>
+        {% if suggestion %}
+        <div class="suggestion-banner {% if '✅' in suggestion %}suggestion-success{% else %}suggestion-warning{% endif %}">
+            {{ suggestion }}
+        </div>
+        {% endif %}
 
-        <br><br>
+        <div class="dashboard-grid">
+            
+            <!-- Top Metric Cards -->
+            <div class="card metric-card">
+                <div class="metric-card-header">
+                    Actual Engagement
+                    <svg viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                </div>
+                <div class="metric-value">
+                    {{ engagement if engagement else '0.0' }}%
+                </div>
+            </div>
+            
+            <div class="card metric-card">
+                <div class="metric-card-header">
+                    Predicted Engagement
+                    <svg viewBox="0 0 24 24"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+                </div>
+                <div class="metric-value">
+                    {% if predicted_engagement %}
+                        {{ predicted_engagement }}%
+                        <span class="badge badge-primary">🔮 AI</span>
+                    {% else %}
+                        ---
+                    {% endif %}
+                </div>
+            </div>
 
-        <button type="submit">Analyze</button>
-    </form>
+            <div class="card metric-card">
+                <div class="metric-card-header">
+                    Difference
+                    <svg viewBox="0 0 24 24"><path d="m21 16-4 4-4-4M21 4 3 20"/></svg>
+                </div>
+                <div class="metric-value">
+                    {% if predicted_engagement and engagement %}
+                        {% set diff = (predicted_engagement - engagement)|round(2) %}
+                        {% if diff > 0 %}
+                            <span style="color: #ef6c00">+{{ diff }}%</span>
+                            <span class="badge badge-danger">Under</span>
+                        {% else %}
+                            <span style="color: #2e7d32">{{ diff }}%</span>
+                            <span class="badge badge-success">Over</span>
+                        {% endif %}
+                    {% else %}
+                        ---
+                    {% endif %}
+                </div>
+            </div>
 
-    <h2>Post History</h2>
-    <table border="1">
-        <tr>
-            <th>Followers</th>
-            <th>Likes</th>
-            <th>Comments</th>
-            <th>Engagement</th>
-            <th>Category</th>
-            <th>Posting Hour</th>
-            <th>Caption Length</th>
-            <th>Hashtag Count</th>
-        </tr>
+            <!-- Prediction Form Container -->
+            <div class="card prediction-area">
+                <h3 class="card-title">Analytics Predictor Input</h3>
+                <form method="post" class="form-grid">
+                    <div class="form-group">
+                        <label>Followers</label>
+                        <input type="number" name="followers" required placeholder="Ex: 10000">
+                    </div>
+                    <div class="form-group">
+                        <label>Likes</label>
+                        <input type="number" name="likes" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Comments</label>
+                        <input type="number" name="comments" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Posting Hour (0-23)</label>
+                        <input type="number" name="hour" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Caption Length</label>
+                        <input type="number" name="caption_length" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hashtag Count</label>
+                        <input type="number" name="hashtags" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Reach</label>
+                        <input type="number" name="reach" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Impressions</label>
+                        <input type="number" name="impressions" required>
+                    </div>
 
-        {% for post in posts %}
-        <tr>
-            <td>{{ post.followers }}</td>
-            <td>{{ post.likes }}</td>
-            <td>{{ post.comments }}</td>
-            <td>{{ post.engagement }}</td>
-            <td>{% if post.category == 0 %}
-                fashion
-                {% elif post.category == 1 %}
-                beauty
-                {% else %}
-                acting
-                {% endif %}
-            </td>
-            <td>{{ post.hour }}</td>
-            <td>{{ post.caption_length }}</td>
-            <td>{{ post.hashtags }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+                    <div class="form-group">
+                        <label>Post Type</label>
+                        <select name="post_type">
+                            <option value="reel">Reel</option>
+                            <option value="image">Image</option>
+                            <option value="carousel">Carousel</option>
+                        </select>
+                    </div>
 
-    <h2>Content Performance Summary</h2>
+                    <div class="form-group">
+                        <label>Content Category</label>
+                        <select name="content_type">
+                            <option value="Technology">Technology</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Music">Music</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Food">Food</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Comedy">Comedy</option>
+                            <option value="Fashion">Fashion</option>
+                        </select>
+                    </div>
 
-    <p>Fashion Avg Engagement: {{ fashion_avg }}%</p>
-    <p>Beauty Avg Engagement: {{ beauty_avg }}%</p>
-    <p>Acting Avg Engagement: {{ acting_avg }}%</p>
+                    <button type="submit" class="btn-submit">Analyze Post</button>
+                </form>
+            </div>
 
-    <h3>🏆 Best Performing Category: {{ best_category }}</h3>
+            <!-- Content Performance Summary -->
+            <div class="card">
+                <h3 class="card-title">Category Performance</h3>
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+                    🏆 Best: <strong>{{ best_category }}</strong>
+                </div>
+                <div class="category-summary">
+                    {% for category, avg in category_averages.items() %}
+                    <div class="category-item">
+                        <span class="category-name">{{ category }}</span>
+                        <span class="category-value">{{ (avg * 100)|round(2) }}%</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="card history-area">
+                <h3 class="card-title">Recent Post History</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Followers</th>
+                                <th>Likes</th>
+                                <th>Comments</th>
+                                <th>Engagement</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Hour</th>
+                                <th>Hashtags</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts[-10:]|reverse %}
+                            <tr>
+                                <td>{{ post.follower_count }}</td>
+                                <td>{{ post.likes }}</td>
+                                <td>{{ post.comments }}</td>
+                                <td><span style="color:var(--primary); font-weight:700;">{{ (post.engagement_rate * 100)|round(2) }}%</span></td>
+                                <td>{{ post.content_category }}</td>
+                                <td style="text-transform: capitalize;">{{ post.media_type }}</td>
+                                <td>{{ post.post_hour }}:00</td>
+                                <td>{{ post.hashtags_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> <!-- end grid -->
+    </div>
 </body>
 </html>

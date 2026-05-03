@@ -1,1 +1,5 @@
 flask
+flask-sqlalchemy
+pandas
+scikit-learn
+joblib
