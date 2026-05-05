@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #f7f8fa;
-  --sidebar-bg: #ffffff;
-  --card-bg: #ffffff;
+  --bg-color: #e6f4e6;
+  --sidebar-bg: #e6f4e6;
+  --card-bg: linear-gradient(135deg, #f7a8d8 0%, #8b5cf6 100%);
   --text-main: #1f1f23;
-  --text-muted: #888893;
-  --border-color: #eef0f4;
+  --text-muted: #6b7280;
+  --border-color: rgba(255, 255, 255, 0.35);
   
-  /* Baby Pink Theme */
-  --primary: #f48fb1; /* Baby pink */
-  --primary-hover: #f06292;
-  --primary-transparent: rgba(244, 143, 177, 0.15);
-  --accent: #ffb6c1;
-  --success: #81c784;
-  --success-bg: rgba(129, 199, 132, 0.15);
-  --warning: #ffb74d;
-  --danger: #e57373;
+  /* Instagram Theme */
+  --primary: #c13584;
+  --primary-hover: #d6336c;
+  --primary-transparent: rgba(193, 53, 132, 0.16);
+  --accent: #f8a5c2;
+  --success: #2ea44f;
+  --success-bg: rgba(46, 164, 79, 0.15);
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 * {
@@ -244,11 +244,11 @@ body {
 
 /* Cards */
 .card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  box-shadow: 0 16px 40px rgba(139, 92, 246, 0.12);
 }
 
 .metric-card {
@@ -372,21 +372,25 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
 }
 thead th {
   text-align: left;
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: white;
   text-transform: uppercase;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.12);
 }
 tbody td {
-  padding: 16px 0;
+  padding: 16px 12px;
   font-size: 13px;
   font-weight: 500;
-  border-bottom: 1px solid #f8f9fa;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 tbody tr:last-child td {
   border-bottom: none;
