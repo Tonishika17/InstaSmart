@@ -16,13 +16,10 @@ __pycache__/
 instance/
 *.sqlite3
 *.db
-database.db
 
 # Large machine learning models & datasets
 # (model.pkl is ~217MB, GitHub blocks files >100MB)
 *.pkl
-model.pkl
-Instagram_Analytics.csv
 dataset.csv
 
 # IDEs
