@@ -87,7 +87,7 @@
                     <svg viewBox="0 0 24 24"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
                 </div>
                 <div class="metric-value">
-                    {% if predicted_engagement %}
+                    {% if predicted_engagement != None %}
                         {{ predicted_engagement }}%
                         <span class="badge badge-primary">🔮 AI</span>
                     {% else %}
@@ -98,11 +98,21 @@
 
             <div class="card metric-card">
                 <div class="metric-card-header">
+                    Total Engagement
+                    <svg viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 0 8v8h-2v-8a4 4 0 0 1 0-8h2z"/></svg>
+                </div>
+                <div class="metric-value">
+                    {{ engagement_count if engagement_count else '0' }}
+                </div>
+            </div>
+
+            <div class="card metric-card">
+                <div class="metric-card-header">
                     Difference
                     <svg viewBox="0 0 24 24"><path d="m21 16-4 4-4-4M21 4 3 20"/></svg>
                 </div>
                 <div class="metric-value">
-                    {% if predicted_engagement and engagement %}
+                    {% if predicted_engagement != None and engagement is not none %}
                         {% set diff = (predicted_engagement - engagement)|round(2) %}
                         {% if diff > 0 %}
                             <span style="color: #ef6c00">+{{ diff }}%</span>
@@ -116,6 +126,17 @@
                     {% endif %}
                 </div>
             </div>
+
+            {% if analytics_insights %}
+            <div class="card insights-area">
+                <h3 class="card-title">Smart Analytics Insights</h3>
+                <ul class="insights-list">
+                    {% for insight in analytics_insights %}
+                    <li>{{ insight }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
             <!-- Prediction Form Container -->
             <div class="card prediction-area">
@@ -146,12 +167,50 @@
                         <input type="number" name="hashtags" required>
                     </div>
                     <div class="form-group">
+                        <label>Shares</label>
+                        <input type="number" name="shares" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Saves</label>
+                        <input type="number" name="saves" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Followers Gained</label>
+                        <input type="number" name="followers_gained" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Day of Week</label>
+                        <select name="day_of_week">
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Traffic Source</label>
+                        <select name="traffic_source">
+                            <option value="Home Feed">Home Feed</option>
+                            <option value="Hashtags">Hashtags</option>
+                            <option value="Reels Feed">Reels Feed</option>
+                            <option value="External">External</option>
+                            <option value="Profile">Profile</option>
+                        </select>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>Call to Action</label>
+                        <input type="checkbox" name="has_call_to_action">
+                    </div>
+                    <div class="form-group">
                         <label>Total Reach</label>
-                        <input type="number" name="reach" required>
+                        <input type="number" name="reach" required min="0">
                     </div>
                     <div class="form-group">
                         <label>Total Impressions</label>
-                        <input type="number" name="impressions" required>
+                        <input type="number" name="impressions" required min="0">
                     </div>
 
                     <div class="form-group">
@@ -209,6 +268,12 @@
                                 <th>Followers</th>
                                 <th>Likes</th>
                                 <th>Comments</th>
+                                <th>Shares</th>
+                                <th>Saves</th>
+                                <th>Followers Gained</th>
+                                <th>CTA</th>
+                                <th>Traffic</th>
+                                <th>Day</th>
                                 <th>Engagement</th>
                                 <th>Category</th>
                                 <th>Type</th>
@@ -217,11 +282,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for post in posts[-10:]|reverse %}
+                            {% for post in posts[:10] %}
                             <tr>
                                 <td>{{ post.follower_count }}</td>
                                 <td>{{ post.likes }}</td>
                                 <td>{{ post.comments }}</td>
+                                <td>{{ post.shares }}</td>
+                                <td>{{ post.saves }}</td>
+                                <td>{{ post.followers_gained }}</td>
+                                <td>{{ 'Yes' if post.has_call_to_action else 'No' }}</td>
+                                <td>{{ post.traffic_source }}</td>
+                                <td>{{ post.day_of_week }}</td>
                                 <td><span style="color:var(--primary); font-weight:700;">{{ (post.engagement_rate * 100)|round(2) }}%</span></td>
                                 <td>{{ post.content_category }}</td>
                                 <td style="text-transform: capitalize;">{{ post.media_type }}</td>
