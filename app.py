@@ -13,6 +13,18 @@ app.config.from_object(config)
 db.init_app(app)
 
 
+def get_posting_period(hour: int) -> str:
+    if hour < 5:
+        return "Late Night"
+    if hour < 12:
+        return "Morning"
+    if hour < 17:
+        return "Afternoon"
+    if hour < 21:
+        return "Evening"
+    return "Night"
+
+
 def initialize_database():
     db.create_all()
     inspector = inspect(db.engine)
@@ -94,6 +106,12 @@ def home():
             "has_call_to_action": has_call_to_action,
             "day_of_week": day_of_week
         }])
+
+        input_df["posting_period"] = input_df["post_hour"].apply(get_posting_period)
+        input_df["day_of_week"] = input_df["day_of_week"].fillna("Unknown").astype(str)
+        input_df["content_category"] = input_df["content_category"].fillna("Unknown").astype(str)
+        input_df["media_type"] = input_df["media_type"].fillna("Unknown").astype(str)
+        input_df["traffic_source"] = input_df["traffic_source"].fillna("Unknown").astype(str)
 
         if model is not None:
             predicted_engagement = float(model.predict(input_df)[0])

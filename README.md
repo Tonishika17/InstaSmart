@@ -1,23 +1,28 @@
 # InstaSmart
 
-A comprehensive Flask-based web application for Instagram analytics and engagement prediction using machine learning. InstaSmart helps users analyze their Instagram performance, predict post engagement rates, and optimize content strategies through data-driven insights.
+A comprehensive Flask-based web application for Instagram analytics and engagement prediction using machine learning. InstaSmart helps users analyze their Instagram performance, predict post engagement rates, and optimize content strategies through data-driven insights. The application features a production-ready preprocessing pipeline for accurate predictions and includes advanced analytics for traffic sources, call-to-action effectiveness, and time-based optimizations.
 
 ## 🚀 Features
 
-- **Engagement Prediction**: Uses machine learning to predict Instagram post engagement rates based on metrics like follower count, likes, comments, hashtags, and posting time.
-- **Content Analysis**: Analyzes different content categories (e.g., food, travel, fashion) to identify best-performing types.
-- **Real-time Analytics**: Calculates current engagement rates and compares with predicted values.
+- **Advanced Engagement Prediction**: Utilizes a Random Forest Regressor with a robust preprocessing pipeline to predict Instagram post engagement rates. Includes log transformation for skewed features, outlier capping, and time-based feature engineering (e.g., posting periods).
+- **Comprehensive Content Analysis**: Analyzes content categories, media types, traffic sources, and posting times to identify best-performing strategies.
+- **Real-time Analytics & Insights**: Calculates engagement rates, provides performance comparisons, and offers actionable suggestions based on predictions.
+- **Extended Metrics Tracking**: Tracks follower count, likes, comments, shares, saves, followers gained, reach, impressions, hashtags, caption length, and more.
+- **Traffic Source Analysis**: Evaluates performance across different traffic sources (e.g., Home Feed, Hashtags, Reels Feed, External).
+- **Call-to-Action Optimization**: Assesses the impact of call-to-action elements on engagement.
+- **Time-Based Insights**: Analyzes posting hours, days of the week, and posting periods for optimal scheduling.
 - **Data Export**: Exports all post data to CSV for further analysis.
-- **Web Dashboard**: User-friendly web interface for inputting post data and viewing results.
-- **Database Storage**: Stores post analytics in a SQLite database for historical tracking.
-- **Optimization Suggestions**: Provides actionable recommendations based on prediction results.
+- **Web Dashboard**: User-friendly interface for inputting detailed post data and viewing results.
+- **Database Storage**: Stores post analytics in a SQLite database for historical tracking and trend analysis.
+- **Modular Preprocessing**: Production-style pipeline with separate handling for numeric, categorical, and binary features, including imputation and scaling.
 
 ## 🛠 Tech Stack
 
 - **Backend**: Python Flask
 - **Database**: SQLAlchemy with SQLite
-- **Machine Learning**: scikit-learn (Random Forest Regressor)
+- **Machine Learning**: scikit-learn (Random Forest Regressor with ColumnTransformer and Pipeline)
 - **Data Processing**: Pandas, NumPy
+- **Visualization**: Matplotlib, Seaborn (for model evaluation plots)
 - **Frontend**: HTML, CSS (Bootstrap-inspired styling)
 - **Serialization**: Joblib for model persistence
 
@@ -52,6 +57,7 @@ A comprehensive Flask-based web application for Instagram analytics and engageme
    ```bash
    python train_model.py
    ```
+   This generates `model.pkl` and evaluation plots in the `plots/` directory.
 
 ## 🎯 Usage
 
@@ -65,19 +71,25 @@ A comprehensive Flask-based web application for Instagram analytics and engageme
 
 3. **Input post data**:
    - Follower count
-   - Likes and comments
-   - Content category
+   - Likes, comments, shares, saves
+   - Followers gained
    - Reach and impressions
-   - Post type (image/video/reel)
-   - Posting hour
+   - Content category (e.g., Technology, Food, Travel)
+   - Media type (e.g., image, video, reel)
+   - Traffic source (e.g., Home Feed, Hashtags, Reels Feed, External)
+   - Day of the week
+   - Posting hour (0-23)
    - Caption length
    - Number of hashtags
+   - Call-to-action presence
 
 4. **View results**:
-   - Predicted engagement rate
-   - Actual engagement rate (if applicable)
-   - Performance suggestions
+   - Predicted engagement rate (based on ML model)
+   - Actual engagement rate (calculated from inputs)
+   - Performance suggestions (e.g., outperform/underperform predictions)
+   - Analytics insights (e.g., hashtag optimization, call-to-action recommendations)
    - Best-performing content categories
+   - Historical post data
 
 5. **Export data**:
    Visit `/export` to download `Instagram_Analytics.csv`
@@ -86,18 +98,61 @@ A comprehensive Flask-based web application for Instagram analytics and engageme
 
 ```
 InstaSmart/
-├── app.py                 # Main Flask application
-├── models.py              # SQLAlchemy database models
-├── train_model.py         # ML model training script
+├── app.py                 # Main Flask application with prediction logic
+├── models.py              # SQLAlchemy database models (Post model)
+├── train_model.py         # ML model training script with modular preprocessing
 ├── verify_ui.py           # UI testing and verification
-├── config.py              # Application configuration (placeholder)
+├── config.py              # Application configuration
 ├── routes.py              # Additional routes (placeholder)
 ├── requirements.txt       # Python dependencies
 ├── README.md              # Project documentation
 ├── .gitignore             # Git ignore rules
-├── Instagram_Analytics.csv # Sample/training data
-├── model.pkl              # Trained ML model
+├── Instagram_Analytics.csv # Training/sample data
+├── model.pkl              # Trained ML model pipeline
 ├── database.db            # SQLite database (auto-generated)
+├── plots/                 # Model evaluation plots (auto-generated)
+│   ├── feature_importance.png
+│   └── confusion_matrix.png
+├── static/
+│   └── style.css          # CSS styling
+├── templates/
+│   └── index.html         # Main dashboard template
+└── instance/              # Flask instance folder
+```
+
+## 🤖 Machine Learning Pipeline
+
+The model uses a production-style preprocessing pipeline:
+
+- **Data Loading & Cleaning**: Handles missing values, data type conversions, and inconsistencies (e.g., reach > impressions).
+- **Feature Engineering**: Adds time-based features (posting periods), engagement calculations, and reach-impression ratios.
+- **Outlier Handling**: Caps extreme values at 1st and 99th percentiles.
+- **Preprocessing**:
+  - Skewed numeric features: Imputation (median), log transformation, standardization.
+  - Linear numeric features: Imputation (median), standardization.
+  - Binary features: Imputation (constant), standardization.
+  - Categorical features: Imputation (constant), one-hot encoding.
+- **Model**: Random Forest Regressor with 200 estimators.
+- **Evaluation**: MAE, R², feature importance, confusion matrix for binned predictions.
+
+## 📊 Model Performance
+
+After training, the model achieves:
+- Mean Absolute Error (MAE): ~0.005
+- R² Score: ~0.65
+- Feature importance plots and classification reports are generated in `plots/`.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 ├── templates/
 │   └── index.html         # Main web interface
 ├── static/
